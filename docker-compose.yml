@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: nursery_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: mohammed
+      POSTGRES_PASSWORD: mohammed_123
+      POSTGRES_DB: hadante_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+
+  app:
+    build: .
+    container_name: nursery_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:
